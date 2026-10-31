@@ -1,11 +1,11 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { requireAuth } from "@/lib/auth/session";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { getAnchorPeriodDate, formatDateISO } from "@/lib/billing/dates";
 import type { BillingPeriod } from "@/lib/billing/dates";
+import { formatDateISO, getAnchorPeriodDate } from "@/lib/billing/dates";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const createSubSchema = z.object({
   customerId: z.string().uuid("Customer required"),
@@ -20,7 +20,10 @@ const createSubSchema = z.object({
   notes: z.string().optional(),
 });
 
-export async function createSubscriptionAction(prevState: unknown, formData: FormData) {
+export async function createSubscriptionAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   // Staff or Admin only
   const session = await requireAuth(["admin", "staff"]);
 
@@ -122,7 +125,9 @@ export async function createSubscriptionAction(prevState: unknown, formData: For
     .single();
 
   if (lineErr || !newLine) {
-    return { error: "Created subscription shell but failed to add product line" };
+    return {
+      error: "Created subscription shell but failed to add product line",
+    };
   }
 
   // Attach Tax if selected
@@ -140,7 +145,11 @@ export async function createSubscriptionAction(prevState: unknown, formData: For
     action: "create_subscription",
     entity_type: "subscription",
     entity_id: newSub.id,
-    new_values: { subscription_number: subNum, customer_id: d.customerId, plan: plan.name },
+    new_values: {
+      subscription_number: subNum,
+      customer_id: d.customerId,
+      plan: plan.name,
+    },
   });
 
   revalidatePath("/staff/subscriptions");
@@ -154,7 +163,13 @@ export async function createSubscriptionAction(prevState: unknown, formData: For
  */
 export async function transitionSubscriptionAction(
   subscriptionId: string,
-  newStatus: "draft" | "quotation" | "confirmed" | "active" | "paused" | "closed",
+  newStatus:
+    | "draft"
+    | "quotation"
+    | "confirmed"
+    | "active"
+    | "paused"
+    | "closed",
 ) {
   const session = await requireAuth();
   const adminClient = createAdminClient();
@@ -211,7 +226,10 @@ export async function renewSubscriptionAction(subscriptionId: string) {
     throw new Error("Not found");
   }
 
-  const plan = sub.plans as { billing_period: BillingPeriod; can_renew: boolean };
+  const plan = sub.plans as {
+    billing_period: BillingPeriod;
+    can_renew: boolean;
+  };
   if (!plan.can_renew) {
     throw new Error("This plan does not permit renewals");
   }

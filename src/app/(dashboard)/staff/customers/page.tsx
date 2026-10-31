@@ -7,9 +7,9 @@ export default async function CustomersPage() {
   await requireAuth(["admin", "staff"]);
   const supabase = createAdminClient();
 
-  const { data: customers, count } = await supabase
+  const { data: customers } = await supabase
     .from("profiles")
-    .select("*", { count: "exact" })
+    .select("*")
     .eq("role", "customer")
     .order("created_at", { ascending: false })
     .limit(50);
@@ -45,13 +45,20 @@ export default async function CustomersPage() {
               </tr>
             ) : (
               (customers || []).map((c: any) => (
-                <tr key={c.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                <tr
+                  key={c.id}
+                  className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                >
                   <td className="py-3 px-4 font-semibold text-neutral-900 dark:text-neutral-100">
                     {c.full_name || "—"}
                   </td>
                   <td className="py-3 px-4">{c.company_name || "—"}</td>
-                  <td className="py-3 px-4 font-mono text-neutral-500">{c.email}</td>
-                  <td className="py-3 px-4 font-mono text-neutral-500">{c.phone || "—"}</td>
+                  <td className="py-3 px-4 font-mono text-neutral-500">
+                    {c.email}
+                  </td>
+                  <td className="py-3 px-4 font-mono text-neutral-500">
+                    {c.phone || "—"}
+                  </td>
                   <td className="py-3 px-4 font-mono text-neutral-400">
                     {new Date(c.created_at).toLocaleDateString()}
                   </td>

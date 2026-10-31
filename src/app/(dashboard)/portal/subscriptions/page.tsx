@@ -18,5 +18,7 @@ export default async function PortalSubscriptionsPage() {
     .eq("customer_id", session.userId)
     .order("created_at", { ascending: false });
 
-  return <PortalSubscriptionsClient subscriptions={(subscriptions || []) as any[]} />;
+  return (
+    <PortalSubscriptionsClient subscriptions={(subscriptions || []) as any[]} />
+  );
 }

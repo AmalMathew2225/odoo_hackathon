@@ -1,10 +1,9 @@
 "use server";
 
-import { z } from "zod";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 // Password rule: > 8 chars (9+), 1 uppercase, 1 lowercase, 1 special char
 const passwordSchema = z
@@ -12,7 +11,10 @@ const passwordSchema = z
   .min(9, "Password must be at least 9 characters long")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character");
+  .regex(
+    /[^A-Za-z0-9]/,
+    "Password must contain at least one special character",
+  );
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address").toLowerCase().trim(),
@@ -27,7 +29,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export async function signupAction(prevState: unknown, formData: FormData) {
+export async function signupAction(_prevState: unknown, formData: FormData) {
   const rawData = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -52,7 +54,9 @@ export async function signupAction(prevState: unknown, formData: FormData) {
   });
 
   if (allowed === false) {
-    return { error: "Too many sign up attempts. Please try again in a few minutes." };
+    return {
+      error: "Too many sign up attempts. Please try again in a few minutes.",
+    };
   }
 
   const supabase = await createClient();
@@ -77,7 +81,7 @@ export async function signupAction(prevState: unknown, formData: FormData) {
   redirect("/portal/subscriptions");
 }
 
-export async function loginAction(prevState: unknown, formData: FormData) {
+export async function loginAction(_prevState: unknown, formData: FormData) {
   const rawData = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -99,7 +103,10 @@ export async function loginAction(prevState: unknown, formData: FormData) {
   });
 
   if (allowed === false) {
-    return { error: "Too many failed attempts. Account temporarily locked for 5 minutes." };
+    return {
+      error:
+        "Too many failed attempts. Account temporarily locked for 5 minutes.",
+    };
   }
 
   const supabase = await createClient();
@@ -134,7 +141,10 @@ export async function logoutAction() {
   redirect("/login");
 }
 
-export async function forgotPasswordAction(prevState: unknown, formData: FormData) {
+export async function forgotPasswordAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   const email = String(formData.get("email") || "")
     .toLowerCase()
     .trim();
@@ -159,11 +169,15 @@ export async function forgotPasswordAction(prevState: unknown, formData: FormDat
 
   return {
     success: true,
-    message: "If that email is registered in our system, a password reset link has been dispatched.",
+    message:
+      "If that email is registered in our system, a password reset link has been dispatched.",
   };
 }
 
-export async function resetPasswordAction(prevState: unknown, formData: FormData) {
+export async function resetPasswordAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   const password = String(formData.get("password") || "");
   const confirmPassword = String(formData.get("confirmPassword") || "");
 

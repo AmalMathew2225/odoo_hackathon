@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { Plus, Tag } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createProductAction, createVariantAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createProductAction, createVariantAction } from "@/actions/catalog";
-import { Plus, Tag } from "lucide-react";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
 
 export function ProductsClient({ products }: { products: any[] }) {
   const [isPending, startTransition] = useTransition();
@@ -86,8 +86,7 @@ export function ProductsClient({ products }: { products: any[] }) {
                   onClick={() => setVariantProduct(p)}
                   className="text-[11px] font-mono text-neutral-900 dark:text-neutral-100 hover:underline flex items-center gap-1"
                 >
-                  <Tag className="h-2.5 w-2.5" />
-                  + Add Variant
+                  <Tag className="h-2.5 w-2.5" />+ Add Variant
                 </button>
               </div>
 
@@ -103,7 +102,8 @@ export function ProductsClient({ products }: { products: any[] }) {
                       className="flex justify-between items-center text-xs p-1.5 rounded bg-neutral-50 dark:bg-neutral-800/60 font-mono"
                     >
                       <span className="text-neutral-700 dark:text-neutral-300">
-                        {v.name}: <strong className="font-sans">{v.value}</strong>
+                        {v.name}:{" "}
+                        <strong className="font-sans">{v.value}</strong>
                       </span>
                       <span className="text-neutral-500">
                         +{formatPaiseToINR(v.extra_price)}
@@ -130,16 +130,50 @@ export function ProductsClient({ products }: { products: any[] }) {
           </div>
         )}
         <form action={handleProductSubmit} className="space-y-4 text-xs">
-          <Input label="Product Name" name="name" required placeholder="Brightloop ERP" />
+          <Input
+            label="Product Name"
+            name="name"
+            required
+            placeholder="Brightloop ERP"
+          />
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Product Type" name="type" defaultValue="Software" required />
-            <Input label="Sales Price (₹)" name="salesPrice" type="number" step="0.01" min="0" required placeholder="4999.00" />
+            <Input
+              label="Product Type"
+              name="type"
+              defaultValue="Software"
+              required
+            />
+            <Input
+              label="Sales Price (₹)"
+              name="salesPrice"
+              type="number"
+              step="0.01"
+              min="0"
+              required
+              placeholder="4999.00"
+            />
           </div>
-          <Input label="Cost Price (₹)" name="costPrice" type="number" step="0.01" min="0" defaultValue="0" />
-          <Input label="Notes" name="notes" placeholder="Enterprise business suite..." />
+          <Input
+            label="Cost Price (₹)"
+            name="costPrice"
+            type="number"
+            step="0.01"
+            min="0"
+            defaultValue="0"
+          />
+          <Input
+            label="Notes"
+            name="notes"
+            placeholder="Enterprise business suite..."
+          />
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsProductModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsProductModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>
@@ -164,12 +198,35 @@ export function ProductsClient({ products }: { products: any[] }) {
           )}
           <form action={handleVariantSubmit} className="space-y-4 text-xs">
             <input type="hidden" name="productId" value={variantProduct.id} />
-            <Input label="Attribute Name" name="name" required placeholder="Brand / Edition / Tier" />
-            <Input label="Attribute Value" name="value" required placeholder="Odoo Edition" />
-            <Input label="Extra Surcharge (₹)" name="extraPrice" type="number" step="0.01" min="0" defaultValue="560.00" required />
+            <Input
+              label="Attribute Name"
+              name="name"
+              required
+              placeholder="Brand / Edition / Tier"
+            />
+            <Input
+              label="Attribute Value"
+              name="value"
+              required
+              placeholder="Odoo Edition"
+            />
+            <Input
+              label="Extra Surcharge (₹)"
+              name="extraPrice"
+              type="number"
+              step="0.01"
+              min="0"
+              defaultValue="560.00"
+              required
+            />
 
             <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-              <Button type="button" variant="outline" size="sm" onClick={() => setVariantProduct(null)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setVariantProduct(null)}
+              >
                 Cancel
               </Button>
               <Button type="submit" size="sm" isLoading={isPending}>

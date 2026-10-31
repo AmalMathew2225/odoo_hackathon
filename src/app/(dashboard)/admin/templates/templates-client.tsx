@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createTemplateAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createTemplateAction } from "@/actions/catalog";
-import { Plus } from "lucide-react";
 
 export function TemplatesClient({
   templates,
@@ -41,7 +41,11 @@ export function TemplatesClient({
           </p>
         </div>
 
-        <Button onClick={() => setIsModalOpen(true)} size="sm" className="flex items-center gap-1.5">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          size="sm"
+          className="flex items-center gap-1.5"
+        >
           <Plus className="h-3.5 w-3.5" />
           <span>New Quotation Template</span>
         </Button>
@@ -73,8 +77,11 @@ export function TemplatesClient({
               <span className="text-[11px] font-semibold text-neutral-400 uppercase block">
                 Included Products
               </span>
-              {(t.quotation_template_lines || []).map((line: any, idx: number) => (
-                <div key={idx} className="text-xs font-mono text-neutral-600 dark:text-neutral-300 flex justify-between">
+              {(t.quotation_template_lines || []).map((line: any) => (
+                <div
+                  key={`${t.id}-${line.products?.name}`}
+                  className="text-xs font-mono text-neutral-600 dark:text-neutral-300 flex justify-between"
+                >
                   <span>&bull; {line.products?.name}</span>
                   <span>Qty {line.quantity}</span>
                 </div>
@@ -96,7 +103,12 @@ export function TemplatesClient({
           </div>
         )}
         <form action={handleSubmit} className="space-y-4 text-xs">
-          <Input label="Template Name" name="name" required placeholder="Standard Cloud Onboarding" />
+          <Input
+            label="Template Name"
+            name="name"
+            required
+            placeholder="Standard Cloud Onboarding"
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -115,7 +127,14 @@ export function TemplatesClient({
                 ))}
               </select>
             </div>
-            <Input label="Validity (Days)" name="validDays" type="number" min="1" defaultValue="30" required />
+            <Input
+              label="Validity (Days)"
+              name="validDays"
+              type="number"
+              min="1"
+              defaultValue="30"
+              required
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -135,13 +154,29 @@ export function TemplatesClient({
                 ))}
               </select>
             </div>
-            <Input label="Quantity" name="quantity" type="number" min="1" defaultValue="1" required />
+            <Input
+              label="Quantity"
+              name="quantity"
+              type="number"
+              min="1"
+              defaultValue="1"
+              required
+            />
           </div>
 
-          <Input label="Notes" name="notes" placeholder="Standard 30-day corporate package..." />
+          <Input
+            label="Notes"
+            name="notes"
+            placeholder="Standard 30-day corporate package..."
+          />
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>

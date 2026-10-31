@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -10,7 +10,9 @@ export function ThemeToggle() {
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
     const initial = saved || (prefersDark ? "dark" : "light");
 
     setTheme(initial);
@@ -40,7 +42,9 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      title={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+      title={
+        theme === "light" ? "Switch to dark theme" : "Switch to light theme"
+      }
       aria-label="Toggle display theme"
       className="inline-flex h-8 w-8 items-center justify-center rounded border border-neutral-200 dark:border-neutral-800 bg-transparent text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
     >

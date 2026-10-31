@@ -58,14 +58,22 @@ export function isLegalSubscriptionTransition(
     };
   }
 
-  if (current === "active" && target === "paused" && options?.canPause === false) {
+  if (
+    current === "active" &&
+    target === "paused" &&
+    options?.canPause === false
+  ) {
     return {
       allowed: false,
       reason: "The assigned subscription plan does not permit pausing.",
     };
   }
 
-  if (current === "quotation" && target === "confirmed" && options?.isQuotationExpired) {
+  if (
+    current === "quotation" &&
+    target === "confirmed" &&
+    options?.isQuotationExpired
+  ) {
     return {
       allowed: false,
       reason: "This quotation has expired past its validity period.",

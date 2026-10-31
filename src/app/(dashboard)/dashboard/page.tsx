@@ -1,6 +1,6 @@
+import { DashboardClient } from "@/components/dashboard/dashboard-client";
 import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { DashboardClient } from "@/components/dashboard/dashboard-client";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +24,9 @@ export default async function DashboardPage() {
       .select("*", { count: "exact", head: true })
       .eq("status", "active"),
 
-    supabase
-      .from("subscriptions")
-      .select("status"),
+    supabase.from("subscriptions").select("status"),
 
-    supabase
-      .from("payments")
-      .select("amount"),
+    supabase.from("payments").select("amount"),
 
     supabase
       .from("invoices")
@@ -64,7 +60,8 @@ export default async function DashboardPage() {
 
   // Compute outstanding balance
   const outstandingPaise = (outstandingRes.data || []).reduce(
-    (sum, inv) => sum + (Number(inv.total_amount || 0) - Number(inv.amount_paid || 0)),
+    (sum, inv) =>
+      sum + (Number(inv.total_amount || 0) - Number(inv.amount_paid || 0)),
     0,
   );
 
@@ -72,7 +69,8 @@ export default async function DashboardPage() {
   const overdueInvoices = overdueRes.data || [];
   const overdueInvoicesCount = overdueInvoices.length;
   const overdueAmountPaise = overdueInvoices.reduce(
-    (sum, inv) => sum + (Number(inv.total_amount || 0) - Number(inv.amount_paid || 0)),
+    (sum, inv) =>
+      sum + (Number(inv.total_amount || 0) - Number(inv.amount_paid || 0)),
     0,
   );
 
@@ -81,10 +79,12 @@ export default async function DashboardPage() {
   for (const s of allSubsStatusRes.data || []) {
     statusCounts[s.status] = (statusCounts[s.status] || 0) + 1;
   }
-  const subscriptionStatusDistribution = Object.entries(statusCounts).map(([name, count]) => ({
-    name,
-    count,
-  }));
+  const subscriptionStatusDistribution = Object.entries(statusCounts).map(
+    ([name, count]) => ({
+      name,
+      count,
+    }),
+  );
 
   // Format recent payments
   const recentPayments = (recentPaymentsRes.data || []).map((p: any) => ({
@@ -94,7 +94,8 @@ export default async function DashboardPage() {
     payment_method: p.payment_method,
     payment_date: p.payment_date,
     invoice_number: p.invoices?.invoice_number || "INV-—",
-    customer_name: p.profiles?.company_name || p.profiles?.full_name || "Direct Client",
+    customer_name:
+      p.profiles?.company_name || p.profiles?.full_name || "Direct Client",
   }));
 
   // Demo revenue by month representation

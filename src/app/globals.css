@@ -46,20 +46,26 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
 }
 
 /* Custom Print Styles for Invoice printing / PDF export */
 @media print {
   body {
-    background: #ffffff !important;
-    color: #000000 !important;
+    background: #ffffff;
+    color: #000000;
   }
-  .no-print, header, aside, nav, button {
-    display: none !important;
+  .no-print,
+  header,
+  aside,
+  nav,
+  button {
+    display: none;
   }
   .print-only {
-    display: block !important;
+    display: block;
   }
   .page-break {
     page-break-after: always;

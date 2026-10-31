@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentSession } from "@/lib/auth/session";
-import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+import { Sidebar } from "@/components/layout/sidebar";
+import { getCurrentSession } from "@/lib/auth/session";
 
 export default async function DashboardLayout({
   children,

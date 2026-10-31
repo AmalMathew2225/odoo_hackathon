@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useActionState } from "react";
 import Link from "next/link";
+import { useActionState, useState } from "react";
 import { signupAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,19 +88,27 @@ export default function SignupPage() {
                 Security Requirements:
               </span>
               <div className="grid grid-cols-2 gap-1 text-[11px]">
-                <div className={`flex items-center gap-1.5 ${hasLength ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}>
+                <div
+                  className={`flex items-center gap-1.5 ${hasLength ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}
+                >
                   <span>{hasLength ? "✓" : "○"}</span>
                   <span>9+ characters</span>
                 </div>
-                <div className={`flex items-center gap-1.5 ${hasUpper ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}>
+                <div
+                  className={`flex items-center gap-1.5 ${hasUpper ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}
+                >
                   <span>{hasUpper ? "✓" : "○"}</span>
                   <span>Uppercase letter</span>
                 </div>
-                <div className={`flex items-center gap-1.5 ${hasLower ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}>
+                <div
+                  className={`flex items-center gap-1.5 ${hasLower ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}
+                >
                   <span>{hasLower ? "✓" : "○"}</span>
                   <span>Lowercase letter</span>
                 </div>
-                <div className={`flex items-center gap-1.5 ${hasSpecial ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}>
+                <div
+                  className={`flex items-center gap-1.5 ${hasSpecial ? "text-neutral-900 dark:text-white font-semibold" : "text-neutral-400"}`}
+                >
                   <span>{hasSpecial ? "✓" : "○"}</span>
                   <span>Special character</span>
                 </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createTaxAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createTaxAction } from "@/actions/catalog";
-import { Plus } from "lucide-react";
 
 export function TaxesClient({ taxes }: { taxes: any[] }) {
   const [isPending, startTransition] = useTransition();
@@ -33,7 +33,11 @@ export function TaxesClient({ taxes }: { taxes: any[] }) {
           </p>
         </div>
 
-        <Button onClick={() => setIsModalOpen(true)} size="sm" className="flex items-center gap-1.5">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          size="sm"
+          className="flex items-center gap-1.5"
+        >
           <Plus className="h-3.5 w-3.5" />
           <span>New Tax Rule</span>
         </Button>
@@ -48,8 +52,12 @@ export function TaxesClient({ taxes }: { taxes: any[] }) {
             <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-400">
               Tax Rule
             </span>
-            <h3 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">{t.name}</h3>
-            <div className="text-2xl font-extrabold font-mono pt-1">{t.rate_percent}%</div>
+            <h3 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">
+              {t.name}
+            </h3>
+            <div className="text-2xl font-extrabold font-mono pt-1">
+              {t.rate_percent}%
+            </div>
           </div>
         ))}
       </div>
@@ -67,10 +75,24 @@ export function TaxesClient({ taxes }: { taxes: any[] }) {
         )}
         <form action={handleSubmit} className="space-y-4 text-xs">
           <Input label="Tax Name" name="name" required placeholder="GST 18%" />
-          <Input label="Rate Percentage (%)" name="ratePercent" type="number" step="0.01" min="0" max="100" required placeholder="18.00" />
+          <Input
+            label="Rate Percentage (%)"
+            name="ratePercent"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            required
+            placeholder="18.00"
+          />
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>

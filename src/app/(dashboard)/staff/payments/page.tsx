@@ -1,6 +1,6 @@
 import { requireAuth } from "@/lib/auth/session";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +8,9 @@ interface PaymentsPageProps {
   searchParams: Promise<{ page?: string }>;
 }
 
-export default async function PaymentsPage({ searchParams }: PaymentsPageProps) {
+export default async function PaymentsPage({
+  searchParams,
+}: PaymentsPageProps) {
   await requireAuth(["admin", "staff"]);
   const params = await searchParams;
   const page = Math.max(1, Number(params.page || 1));
@@ -21,15 +23,18 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
 
   const { data: payments, count } = await supabase
     .from("payments")
-    .select(`
+    .select(
+      `
       id, payment_number, amount, payment_method, payment_date, note, created_at,
       profiles(full_name, company_name, email),
       invoices(invoice_number)
-    `, { count: "exact" })
+    `,
+      { count: "exact" },
+    )
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  const totalPages = Math.ceil((count || 0) / pageSize);
+  const _totalPages = Math.ceil((count || 0) / pageSize);
 
   return (
     <div className="space-y-6">
@@ -65,11 +70,18 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
                 </tr>
               ) : (
                 (payments || []).map((p: any) => (
-                  <tr key={p.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                    <td className="py-3 px-4 font-mono font-medium">{p.payment_number}</td>
+                  <tr
+                    key={p.id}
+                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                  >
+                    <td className="py-3 px-4 font-mono font-medium">
+                      {p.payment_number}
+                    </td>
                     <td className="py-3 px-4">
                       <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                        {p.profiles?.company_name || p.profiles?.full_name || "—"}
+                        {p.profiles?.company_name ||
+                          p.profiles?.full_name ||
+                          "—"}
                       </div>
                       <div className="text-[11px] text-neutral-400 font-mono">
                         {p.profiles?.email}
@@ -83,8 +95,12 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
                         {p.payment_method}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono text-neutral-500">{p.payment_date}</td>
-                    <td className="py-3 px-4 text-neutral-500">{p.note || "—"}</td>
+                    <td className="py-3 px-4 font-mono text-neutral-500">
+                      {p.payment_date}
+                    </td>
+                    <td className="py-3 px-4 text-neutral-500">
+                      {p.note || "—"}
+                    </td>
                     <td className="py-3 px-4 text-right font-semibold font-mono">
                       {formatPaiseToINR(p.amount)}
                     </td>

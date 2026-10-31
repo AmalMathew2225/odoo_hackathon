@@ -1,13 +1,20 @@
 "use client";
 
-import React, { useTransition } from "react";
+import { Pause, Play, RotateCcw, XCircle } from "lucide-react";
+import { useTransition } from "react";
+import {
+  renewSubscriptionAction,
+  transitionSubscriptionAction,
+} from "@/actions/subscriptions";
 import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
-import { transitionSubscriptionAction, renewSubscriptionAction } from "@/actions/subscriptions";
-import { Pause, Play, RotateCcw, XCircle } from "lucide-react";
 
-export function PortalSubscriptionsClient({ subscriptions }: { subscriptions: any[] }) {
+export function PortalSubscriptionsClient({
+  subscriptions,
+}: {
+  subscriptions: any[];
+}) {
   const [isPending, startTransition] = useTransition();
 
   const handlePause = (id: string) => {
@@ -42,7 +49,8 @@ export function PortalSubscriptionsClient({ subscriptions }: { subscriptions: an
   };
 
   const handleClose = (id: string) => {
-    if (!confirm("Are you sure you want to terminate this subscription?")) return;
+    if (!confirm("Are you sure you want to terminate this subscription?"))
+      return;
     startTransition(async () => {
       try {
         await transitionSubscriptionAction(id, "closed");
@@ -66,7 +74,8 @@ export function PortalSubscriptionsClient({ subscriptions }: { subscriptions: an
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {subscriptions.length === 0 ? (
           <div className="col-span-2 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-12 text-center text-xs text-neutral-500">
-            You do not currently have any active subscriptions. Please contact sales to provision a contract.
+            You do not currently have any active subscriptions. Please contact
+            sales to provision a contract.
           </div>
         ) : (
           subscriptions.map((s) => {
@@ -105,11 +114,15 @@ export function PortalSubscriptionsClient({ subscriptions }: { subscriptions: an
                   </div>
                   <div className="flex justify-between text-neutral-500">
                     <span>Next Automated Billing:</span>
-                    <span className="font-mono">{s.next_billing_date || "—"}</span>
+                    <span className="font-mono">
+                      {s.next_billing_date || "—"}
+                    </span>
                   </div>
                   <div className="flex justify-between text-neutral-500">
                     <span>Contract Expiry:</span>
-                    <span className="font-mono">{s.expiry_date || "Continuous"}</span>
+                    <span className="font-mono">
+                      {s.expiry_date || "Continuous"}
+                    </span>
                   </div>
                 </div>
 

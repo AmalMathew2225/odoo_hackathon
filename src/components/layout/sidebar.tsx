@@ -1,28 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  Package,
-  Layers,
-  FileSpreadsheet,
-  Receipt,
-  CreditCard,
-  Users,
-  Percent,
-  Sliders,
-  Clock,
-  ShieldAlert,
-  LogOut,
   ChevronLeft,
   ChevronRight,
+  Clock,
+  CreditCard,
+  FileSpreadsheet,
+  Layers,
+  LayoutDashboard,
+  LogOut,
+  Package,
+  Percent,
+  Receipt,
+  ShieldAlert,
+  Sliders,
   UserCheck,
-  Zap,
+  Users,
 } from "lucide-react";
-import type { UserRole } from "@/types/database";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { logoutAction } from "@/actions/auth";
+import type { UserRole } from "@/types/database";
 
 interface SidebarProps {
   role: UserRole;
@@ -42,7 +41,11 @@ export function Sidebar({ role, userEmail, userName }: SidebarProps) {
     { label: "Customers", href: "/staff/customers", icon: Users },
     { label: "Products & Variants", href: "/admin/products", icon: Package },
     { label: "Plans", href: "/admin/plans", icon: Sliders },
-    { label: "Quotation Templates", href: "/admin/templates", icon: FileSpreadsheet },
+    {
+      label: "Quotation Templates",
+      href: "/admin/templates",
+      icon: FileSpreadsheet,
+    },
     { label: "Taxes", href: "/admin/taxes", icon: Receipt },
     { label: "Discounts", href: "/admin/discounts", icon: Percent },
     { label: "Payment Terms", href: "/admin/payment-terms", icon: Clock },

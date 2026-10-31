@@ -9,10 +9,13 @@ export default async function AuditLogsPage() {
 
   const { data: logs, count } = await supabase
     .from("audit_logs")
-    .select(`
+    .select(
+      `
       id, action, entity_type, entity_id, old_values, new_values, created_at,
       profiles(email, full_name, role)
-    `, { count: "exact" })
+    `,
+      { count: "exact" },
+    )
     .order("created_at", { ascending: false })
     .limit(100);
 
@@ -23,7 +26,8 @@ export default async function AuditLogsPage() {
           Security & Operations Audit Trail
         </h1>
         <p className="text-xs text-neutral-500">
-          Append-only cryptographic audit record &bull; {(count || 0).toLocaleString()} actions recorded
+          Append-only cryptographic audit record &bull;{" "}
+          {(count || 0).toLocaleString()} actions recorded
         </p>
       </div>
 
@@ -41,13 +45,19 @@ export default async function AuditLogsPage() {
           <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 text-[11px]">
             {(logs || []).length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-neutral-400 font-sans">
+                <td
+                  colSpan={5}
+                  className="py-8 text-center text-neutral-400 font-sans"
+                >
                   No audit events recorded yet.
                 </td>
               </tr>
             ) : (
               (logs || []).map((l: any) => (
-                <tr key={l.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                <tr
+                  key={l.id}
+                  className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                >
                   <td className="py-2.5 px-4 text-neutral-400 whitespace-nowrap">
                     {new Date(l.created_at).toLocaleString()}
                   </td>

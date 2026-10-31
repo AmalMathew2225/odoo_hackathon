@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createDiscountAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createDiscountAction } from "@/actions/catalog";
-import { Plus } from "lucide-react";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
 
 export function DiscountsClient({ discounts }: { discounts: any[] }) {
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [discountType, setDiscountType] = useState<"percentage" | "fixed">("percentage");
+  const [discountType, setDiscountType] = useState<"percentage" | "fixed">(
+    "percentage",
+  );
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (formData: FormData) => {
@@ -31,11 +33,16 @@ export function DiscountsClient({ discounts }: { discounts: any[] }) {
             Discount Coupons & Usage Quotas
           </h1>
           <p className="text-xs text-neutral-500">
-            Atomic concurrency-safe discounts with automated release on invoice cancellation
+            Atomic concurrency-safe discounts with automated release on invoice
+            cancellation
           </p>
         </div>
 
-        <Button onClick={() => setIsModalOpen(true)} size="sm" className="flex items-center gap-1.5">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          size="sm"
+          className="flex items-center gap-1.5"
+        >
           <Plus className="h-3.5 w-3.5" />
           <span>New Discount Rule</span>
         </Button>
@@ -61,16 +68,28 @@ export function DiscountsClient({ discounts }: { discounts: any[] }) {
               </span>
             </div>
 
-            {d.description && <p className="text-xs text-neutral-500">{d.description}</p>}
+            {d.description && (
+              <p className="text-xs text-neutral-500">{d.description}</p>
+            )}
 
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800/80 text-xs font-mono space-y-1">
               <div className="flex justify-between text-neutral-500">
                 <span>Usage Limit:</span>
-                <span>{d.usage_limit ? `${d.times_used} / ${d.usage_limit}` : `${d.times_used} (Unlimited)`}</span>
+                <span>
+                  {d.usage_limit
+                    ? `${d.times_used} / ${d.usage_limit}`
+                    : `${d.times_used} (Unlimited)`}
+                </span>
               </div>
               <div className="flex justify-between text-neutral-500">
                 <span>Status:</span>
-                <span className={d.is_active ? "text-neutral-900 dark:text-neutral-100 font-bold" : "text-neutral-400"}>
+                <span
+                  className={
+                    d.is_active
+                      ? "text-neutral-900 dark:text-neutral-100 font-bold"
+                      : "text-neutral-400"
+                  }
+                >
                   {d.is_active ? "ACTIVE" : "INACTIVE"}
                 </span>
               </div>
@@ -91,8 +110,17 @@ export function DiscountsClient({ discounts }: { discounts: any[] }) {
           </div>
         )}
         <form action={handleSubmit} className="space-y-4 text-xs">
-          <Input label="Coupon Code" name="code" required placeholder="SUMMER20" />
-          <Input label="Description" name="description" placeholder="Summer 2026 onboarding incentive" />
+          <Input
+            label="Coupon Code"
+            name="code"
+            required
+            placeholder="SUMMER20"
+          />
+          <Input
+            label="Description"
+            name="description"
+            placeholder="Summer 2026 onboarding incentive"
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -110,7 +138,11 @@ export function DiscountsClient({ discounts }: { discounts: any[] }) {
               </select>
             </div>
             <Input
-              label={discountType === "fixed" ? "Deduction Amount (₹)" : "Percentage Value (%)"}
+              label={
+                discountType === "fixed"
+                  ? "Deduction Amount (₹)"
+                  : "Percentage Value (%)"
+              }
               name="value"
               type="number"
               step={discountType === "fixed" ? "0.01" : "1"}
@@ -130,7 +162,12 @@ export function DiscountsClient({ discounts }: { discounts: any[] }) {
           />
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>

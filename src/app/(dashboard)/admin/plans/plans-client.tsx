@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createPlanAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createPlanAction } from "@/actions/catalog";
-import { Plus, Check, X } from "lucide-react";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
 
 export function PlansClient({ plans }: { plans: any[] }) {
   const [isPending, startTransition] = useTransition();
@@ -30,7 +30,8 @@ export function PlansClient({ plans }: { plans: any[] }) {
             Subscription Plans & Policy Rules
           </h1>
           <p className="text-xs text-neutral-500">
-            Billing cycles, minimum commitments, pausing rules, and renewal terms
+            Billing cycles, minimum commitments, pausing rules, and renewal
+            terms
           </p>
         </div>
 
@@ -98,10 +99,23 @@ export function PlansClient({ plans }: { plans: any[] }) {
           </div>
         )}
         <form action={handleSubmit} className="space-y-4 text-xs">
-          <Input label="Plan Name" name="name" required placeholder="Growth Monthly" />
+          <Input
+            label="Plan Name"
+            name="name"
+            required
+            placeholder="Growth Monthly"
+          />
           <div className="grid grid-cols-2 gap-3">
             <Input label="Code" name="code" required placeholder="GROWTH-M" />
-            <Input label="Base Price (₹)" name="price" type="number" step="0.01" min="0" required placeholder="9999.00" />
+            <Input
+              label="Base Price (₹)"
+              name="price"
+              type="number"
+              step="0.01"
+              min="0"
+              required
+              placeholder="9999.00"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -119,7 +133,14 @@ export function PlansClient({ plans }: { plans: any[] }) {
                 <option value="daily">Daily</option>
               </select>
             </div>
-            <Input label="Min Quantity" name="minQuantity" type="number" min="1" defaultValue="1" required />
+            <Input
+              label="Min Quantity"
+              name="minQuantity"
+              type="number"
+              min="1"
+              defaultValue="1"
+              required
+            />
           </div>
 
           <div className="space-y-2 pt-2 border-t border-neutral-200 dark:border-neutral-800 text-xs">
@@ -127,21 +148,38 @@ export function PlansClient({ plans }: { plans: any[] }) {
               Contract Lifecycle Flags
             </span>
             <label className="flex items-center gap-2">
-              <input type="checkbox" name="canPause" defaultChecked className="rounded" />
+              <input
+                type="checkbox"
+                name="canPause"
+                defaultChecked
+                className="rounded"
+              />
               <span>Allow customer/staff to pause contract</span>
             </label>
             <label className="flex items-center gap-2">
-              <input type="checkbox" name="canRenew" defaultChecked className="rounded" />
+              <input
+                type="checkbox"
+                name="canRenew"
+                defaultChecked
+                className="rounded"
+              />
               <span>Allow contract renewal (+1 term extension)</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" name="autoClose" className="rounded" />
-              <span>Automatically close contract when expiry date is reached</span>
+              <span>
+                Automatically close contract when expiry date is reached
+              </span>
             </label>
           </div>
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>

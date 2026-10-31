@@ -15,3 +15,4 @@ export default async function AdminPaymentTermsPage() {
 
   return <PaymentTermsClient terms={(terms || []) as any[]} />;
 }
+

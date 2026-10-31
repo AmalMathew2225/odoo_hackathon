@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import { Zap } from "lucide-react";
+import { useState } from "react";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
-import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Zap } from "lucide-react";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
 
 interface DashboardData {
   activeSubscriptionsCount: number;
@@ -36,8 +35,12 @@ interface DashboardData {
   }[];
 }
 
-export function DashboardClient({ initialData }: { initialData: DashboardData }) {
-  const [data, setData] = useState<DashboardData>(initialData);
+export function DashboardClient({
+  initialData,
+}: {
+  initialData: DashboardData;
+}) {
+  const [data, _setData] = useState<DashboardData>(initialData);
   const [isBillingRunning, setIsBillingRunning] = useState(false);
   const [billingResult, setBillingResult] = useState<string | null>(null);
 
@@ -49,7 +52,9 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
       const res = await fetch("/api/billing/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ target_date: new Date().toISOString().split("T")[0] }),
+        body: JSON.stringify({
+          target_date: new Date().toISOString().split("T")[0],
+        }),
       });
       const json = await res.json();
       if (json.success) {
@@ -60,7 +65,9 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
         setBillingResult(`Billing error: ${json.error}`);
       }
     } catch (err: unknown) {
-      setBillingResult(`Request failed: ${err instanceof Error ? err.message : String(err)}`);
+      setBillingResult(
+        `Request failed: ${err instanceof Error ? err.message : String(err)}`,
+      );
     } finally {
       setIsBillingRunning(false);
     }
@@ -75,7 +82,8 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
             Finance & Subscriptions Overview
           </h1>
           <p className="text-xs text-neutral-500 mt-1">
-            Real-time telemetry, automated billing runs, and revenue health metrics.
+            Real-time telemetry, automated billing runs, and revenue health
+            metrics.
           </p>
         </div>
 
@@ -124,7 +132,9 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
           <div className="text-2xl font-extrabold text-neutral-900 dark:text-neutral-50">
             {formatPaiseToINR(data.totalRevenuePaise)}
           </div>
-          <p className="text-xs text-neutral-500">Settled and confirmed payments</p>
+          <p className="text-xs text-neutral-500">
+            Settled and confirmed payments
+          </p>
         </div>
 
         <div className="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 space-y-1 shadow-xs">
@@ -161,12 +171,19 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
               Monthly Revenue Performance (₹)
             </h3>
-            <span className="text-xs text-neutral-400 font-mono">Q3/Q4 2026</span>
+            <span className="text-xs text-neutral-400 font-mono">
+              Q3/Q4 2026
+            </span>
           </div>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.revenueByMonth}>
-                <XAxis dataKey="month" stroke="#737373" fontSize={11} tickLine={false} />
+                <XAxis
+                  dataKey="month"
+                  stroke="#737373"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis
                   stroke="#737373"
                   fontSize={11}
@@ -174,7 +191,10 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
                   tickFormatter={(val) => `₹${val / 1000}k`}
                 />
                 <Tooltip
-                  formatter={(val: unknown) => [formatPaiseToINR(Number(val) * 100), "Revenue"]}
+                  formatter={(val: unknown) => [
+                    formatPaiseToINR(Number(val) * 100),
+                    "Revenue",
+                  ]}
                   contentStyle={{
                     backgroundColor: "#171717",
                     borderColor: "#404040",
@@ -207,8 +227,19 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
                   paddingAngle={4}
                 >
                   {data.subscriptionStatusDistribution.map((entry, index) => {
-                    const grayscale = ["#171717", "#525252", "#a3a3a3", "#e5e5e5"][index % 4];
-                    return <Cell key={`cell-${index}`} fill={grayscale} stroke="#000000" />;
+                    const grayscale = [
+                      "#171717",
+                      "#525252",
+                      "#a3a3a3",
+                      "#e5e5e5",
+                    ][index % 4];
+                    return (
+                      <Cell
+                        key={`cell-${entry.name}`}
+                        fill={grayscale}
+                        stroke="#000000"
+                      />
+                    );
                   })}
                 </Pie>
                 <Tooltip
@@ -227,7 +258,12 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
                 <span
                   className="h-2 w-2 rounded-full inline-block"
                   style={{
-                    backgroundColor: ["#171717", "#525252", "#a3a3a3", "#e5e5e5"][idx % 4],
+                    backgroundColor: [
+                      "#171717",
+                      "#525252",
+                      "#a3a3a3",
+                      "#e5e5e5",
+                    ][idx % 4],
                   }}
                 />
                 <span className="text-neutral-600 dark:text-neutral-400 capitalize">
@@ -249,7 +285,9 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
               Recent Manual Payment Settlements
             </h3>
-            <p className="text-xs text-neutral-500">Direct ledger reconciliation records</p>
+            <p className="text-xs text-neutral-500">
+              Direct ledger reconciliation records
+            </p>
           </div>
         </div>
         <div className="overflow-x-auto">
@@ -273,16 +311,25 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
                 </tr>
               ) : (
                 data.recentPayments.map((p) => (
-                  <tr key={p.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                    <td className="py-3 px-4 font-mono font-medium">{p.payment_number}</td>
+                  <tr
+                    key={p.id}
+                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                  >
+                    <td className="py-3 px-4 font-mono font-medium">
+                      {p.payment_number}
+                    </td>
                     <td className="py-3 px-4">{p.customer_name}</td>
-                    <td className="py-3 px-4 font-mono text-neutral-500">{p.invoice_number}</td>
+                    <td className="py-3 px-4 font-mono text-neutral-500">
+                      {p.invoice_number}
+                    </td>
                     <td className="py-3 px-4">
                       <span className="px-2 py-0.5 rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 font-mono text-[10px]">
                         {p.payment_method}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-neutral-500">{p.payment_date}</td>
+                    <td className="py-3 px-4 text-neutral-500">
+                      {p.payment_date}
+                    </td>
                     <td className="py-3 px-4 text-right font-semibold font-mono">
                       {formatPaiseToINR(p.amount)}
                     </td>

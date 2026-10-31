@@ -1,6 +1,5 @@
 import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
 import { ProductsClient } from "./products-client";
 
 export const dynamic = "force-dynamic";

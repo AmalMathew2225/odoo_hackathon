@@ -1,7 +1,7 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -16,7 +16,10 @@ const createStaffSchema = z.object({
  * Creates an internal Staff account.
  * Enforces: ONLY an Admin can perform this mutation using service_role key.
  */
-export async function createStaffAccount(prevState: unknown, formData: FormData) {
+export async function createStaffAccount(
+  _prevState: unknown,
+  formData: FormData,
+) {
   // Step 1: Zero-Trust Auth Verification (Must be Admin)
   const session = await requireAuth(["admin"]);
 
@@ -36,15 +39,16 @@ export async function createStaffAccount(prevState: unknown, formData: FormData)
   const adminClient = createAdminClient();
 
   // Create Auth User
-  const { data: userData, error: createError } = await adminClient.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      full_name: fullName,
-      phone: phone || "",
-    },
-  });
+  const { data: userData, error: createError } =
+    await adminClient.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        full_name: fullName,
+        phone: phone || "",
+      },
+    });
 
   if (createError || !userData.user) {
     return { error: createError?.message || "Failed to create user" };
@@ -78,7 +82,10 @@ export async function createStaffAccount(prevState: unknown, formData: FormData)
   return { success: true };
 }
 
-export async function updateUserRole(userId: string, newRole: "customer" | "staff" | "admin") {
+export async function updateUserRole(
+  userId: string,
+  newRole: "customer" | "staff" | "admin",
+) {
   const session = await requireAuth(["admin"]);
   const adminClient = createAdminClient();
 

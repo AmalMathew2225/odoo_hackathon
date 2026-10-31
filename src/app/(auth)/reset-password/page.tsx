@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useActionState } from "react";
+import { useActionState } from "react";
 import { resetPasswordAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function ResetPasswordPage() {
-  const [state, formAction, isPending] = useActionState(resetPasswordAction, null);
+  const [state, formAction, isPending] = useActionState(
+    resetPasswordAction,
+    null,
+  );
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950 p-4">
@@ -19,7 +22,8 @@ export default function ResetPasswordPage() {
             Set New Password
           </h1>
           <p className="text-xs text-neutral-500">
-            Minimum 9 characters with uppercase, lowercase, and special character
+            Minimum 9 characters with uppercase, lowercase, and special
+            character
           </p>
         </div>
 

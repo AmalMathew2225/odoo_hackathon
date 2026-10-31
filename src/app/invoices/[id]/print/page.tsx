@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { getCurrentSession } from "@/lib/auth/session";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
 import { StatusBadge } from "@/components/ui/badge";
+import { getCurrentSession } from "@/lib/auth/session";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { PrintButton } from "./print-button";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +45,8 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
     .eq("invoice_id", id);
 
   const customer = invoice.profiles;
-  const isPaid = invoice.status === "paid" || invoice.amount_paid >= invoice.total_amount;
+  const _isPaid =
+    invoice.status === "paid" || invoice.amount_paid >= invoice.total_amount;
 
   return (
     <div className="min-h-screen bg-white text-black p-8 sm:p-12 font-sans max-w-4xl mx-auto">
@@ -74,8 +75,12 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
           </div>
 
           <div className="text-right">
-            <span className="text-xs font-mono uppercase text-neutral-400 block">TAX INVOICE</span>
-            <div className="text-xl font-bold font-mono">{invoice.invoice_number}</div>
+            <span className="text-xs font-mono uppercase text-neutral-400 block">
+              TAX INVOICE
+            </span>
+            <div className="text-xl font-bold font-mono">
+              {invoice.invoice_number}
+            </div>
             <div className="mt-1">
               <StatusBadge status={invoice.status} />
             </div>
@@ -85,7 +90,9 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
         {/* Client & Period Metadata */}
         <div className="grid grid-cols-2 gap-8 py-6 border-b border-neutral-200 text-xs">
           <div>
-            <span className="font-mono uppercase text-neutral-400 block mb-1">Billed To:</span>
+            <span className="font-mono uppercase text-neutral-400 block mb-1">
+              Billed To:
+            </span>
             <div className="font-bold text-sm text-neutral-900">
               {customer?.company_name || customer?.full_name}
             </div>
@@ -93,13 +100,17 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
               <div className="text-neutral-600">{customer.full_name}</div>
             )}
             <div className="text-neutral-600 font-mono">{customer?.email}</div>
-            {customer?.phone && <div className="text-neutral-600">{customer.phone}</div>}
+            {customer?.phone && (
+              <div className="text-neutral-600">{customer.phone}</div>
+            )}
           </div>
 
           <div className="text-right space-y-1 font-mono">
             <div>
               <span className="text-neutral-400">Contract Reference: </span>
-              <span className="font-semibold">{invoice.subscriptions?.subscription_number}</span>
+              <span className="font-semibold">
+                {invoice.subscriptions?.subscription_number}
+              </span>
             </div>
             <div>
               <span className="text-neutral-400">Issue Date: </span>
@@ -111,7 +122,9 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
             </div>
             <div>
               <span className="text-neutral-400">Billing Period: </span>
-              <span>{invoice.period_start} to {invoice.period_end}</span>
+              <span>
+                {invoice.period_start} to {invoice.period_end}
+              </span>
             </div>
           </div>
         </div>
@@ -132,20 +145,30 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
             {(lines || []).map((l) => (
               <tr key={l.id}>
                 <td className="py-3 font-sans">
-                  <div className="font-bold text-neutral-900">{l.product_name}</div>
+                  <div className="font-bold text-neutral-900">
+                    {l.product_name}
+                  </div>
                   {l.variant_name && (
-                    <div className="text-[11px] text-neutral-500">{l.variant_name}</div>
+                    <div className="text-[11px] text-neutral-500">
+                      {l.variant_name}
+                    </div>
                   )}
                 </td>
                 <td className="py-3 text-center">{l.quantity}</td>
-                <td className="py-3 text-right">{formatPaiseToINR(l.unit_price)}</td>
                 <td className="py-3 text-right">
-                  {l.discount_amount > 0 ? `-${formatPaiseToINR(l.discount_amount)}` : "—"}
+                  {formatPaiseToINR(l.unit_price)}
+                </td>
+                <td className="py-3 text-right">
+                  {l.discount_amount > 0
+                    ? `-${formatPaiseToINR(l.discount_amount)}`
+                    : "—"}
                 </td>
                 <td className="py-3 text-right">
                   {formatPaiseToINR(l.tax_amount)} ({l.tax_rate}%)
                 </td>
-                <td className="py-3 text-right font-bold">{formatPaiseToINR(l.line_total)}</td>
+                <td className="py-3 text-right font-bold">
+                  {formatPaiseToINR(l.line_total)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -178,15 +201,22 @@ export default async function InvoicePrintPage({ params }: PrintPageProps) {
             </div>
             <div className="flex justify-between font-extrabold text-base pt-2 border-t-2 border-neutral-900">
               <span>Balance Due:</span>
-              <span>{formatPaiseToINR(invoice.total_amount - invoice.amount_paid)}</span>
+              <span>
+                {formatPaiseToINR(invoice.total_amount - invoice.amount_paid)}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Footer Notes */}
         <div className="mt-12 pt-6 border-t border-neutral-200 text-[11px] text-neutral-500 space-y-1">
-          <p className="font-semibold text-neutral-700">Payment Terms & Instructions:</p>
-          <p>Settlement accepted via direct Bank Transfer (NEFT/RTGS) or UPI to Brightloop Software.</p>
+          <p className="font-semibold text-neutral-700">
+            Payment Terms & Instructions:
+          </p>
+          <p>
+            Settlement accepted via direct Bank Transfer (NEFT/RTGS) or UPI to
+            Brightloop Software.
+          </p>
           <p>Computer generated invoice. No signature required.</p>
         </div>
       </div>

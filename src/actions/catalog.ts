@@ -1,7 +1,7 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -12,11 +12,14 @@ const productSchema = z.object({
   name: z.string().min(2, "Product name must be at least 2 characters").trim(),
   type: z.string().default("Software"),
   salesPrice: z.coerce.number().min(0, "Sales price cannot be negative"), // in rupees from UI
-  costPrice: z.coerce.number().min(0, "Cost price cannot be negative"),   // in rupees from UI
+  costPrice: z.coerce.number().min(0, "Cost price cannot be negative"), // in rupees from UI
   notes: z.string().optional(),
 });
 
-export async function createProductAction(prevState: unknown, formData: FormData) {
+export async function createProductAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   const session = await requireAuth(["admin"]);
 
   const raw = {
@@ -63,7 +66,10 @@ export async function createProductAction(prevState: unknown, formData: FormData
   return { success: true };
 }
 
-export async function createVariantAction(prevState: unknown, formData: FormData) {
+export async function createVariantAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   await requireAuth(["admin"]);
 
   const productId = String(formData.get("productId") || "");
@@ -106,7 +112,10 @@ const planSchema = z.object({
   canRenew: z.boolean().default(true),
 });
 
-export async function createPlanAction(prevState: unknown, formData: FormData) {
+export async function createPlanAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   const session = await requireAuth(["admin"]);
 
   const raw = {
@@ -115,7 +124,9 @@ export async function createPlanAction(prevState: unknown, formData: FormData) {
     price: formData.get("price"),
     billingPeriod: formData.get("billingPeriod"),
     minQuantity: formData.get("minQuantity"),
-    autoClose: formData.get("autoClose") === "true" || formData.get("autoClose") === "on",
+    autoClose:
+      formData.get("autoClose") === "true" ||
+      formData.get("autoClose") === "on",
     canCloseEarly: formData.get("canCloseEarly") !== "false",
     canPause: formData.get("canPause") !== "false",
     canRenew: formData.get("canRenew") !== "false",
@@ -161,7 +172,10 @@ export async function createPlanAction(prevState: unknown, formData: FormData) {
 // -----------------------------------------------------------------------------
 // PAYMENT TERMS & TAXES
 // -----------------------------------------------------------------------------
-export async function createPaymentTermAction(prevState: unknown, formData: FormData) {
+export async function createPaymentTermAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   await requireAuth(["admin"]);
 
   const name = String(formData.get("name") || "").trim();
@@ -182,7 +196,7 @@ export async function createPaymentTermAction(prevState: unknown, formData: Form
   return { success: true };
 }
 
-export async function createTaxAction(prevState: unknown, formData: FormData) {
+export async function createTaxAction(_prevState: unknown, formData: FormData) {
   await requireAuth(["admin"]);
 
   const name = String(formData.get("name") || "").trim();
@@ -208,21 +222,29 @@ export async function createTaxAction(prevState: unknown, formData: FormData) {
 // -----------------------------------------------------------------------------
 // DISCOUNTS
 // -----------------------------------------------------------------------------
-export async function createDiscountAction(prevState: unknown, formData: FormData) {
+export async function createDiscountAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   const session = await requireAuth(["admin"]);
 
-  const code = String(formData.get("code") || "").toUpperCase().trim();
+  const code = String(formData.get("code") || "")
+    .toUpperCase()
+    .trim();
   const description = String(formData.get("description") || "").trim();
   const type = String(formData.get("type") || "percentage");
   const valueInput = Number(formData.get("value") || 0);
-  const usageLimit = formData.get("usageLimit") ? Number(formData.get("usageLimit")) : null;
+  const usageLimit = formData.get("usageLimit")
+    ? Number(formData.get("usageLimit"))
+    : null;
 
   if (!code || valueInput <= 0) {
     return { error: "Code and positive value are required" };
   }
 
   // If fixed, convert rupees to paise
-  const finalValue = type === "fixed" ? Math.round(valueInput * 100) : Math.round(valueInput);
+  const finalValue =
+    type === "fixed" ? Math.round(valueInput * 100) : Math.round(valueInput);
 
   const adminClient = createAdminClient();
   const { error } = await adminClient.from("discounts").insert({
@@ -253,7 +275,10 @@ export async function createDiscountAction(prevState: unknown, formData: FormDat
 // -----------------------------------------------------------------------------
 // QUOTATION TEMPLATES
 // -----------------------------------------------------------------------------
-export async function createTemplateAction(prevState: unknown, formData: FormData) {
+export async function createTemplateAction(
+  _prevState: unknown,
+  formData: FormData,
+) {
   await requireAuth(["admin"]);
 
   const name = String(formData.get("name") || "").trim();
@@ -279,7 +304,8 @@ export async function createTemplateAction(prevState: unknown, formData: FormDat
     .select("id")
     .single();
 
-  if (tmplErr || !template) return { error: tmplErr?.message || "Failed to create template" };
+  if (tmplErr || !template)
+    return { error: tmplErr?.message || "Failed to create template" };
 
   await adminClient.from("quotation_template_lines").insert({
     template_id: template.id,

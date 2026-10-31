@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createPaymentTermAction } from "@/actions/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { createPaymentTermAction } from "@/actions/catalog";
-import { Plus } from "lucide-react";
 
 export function PaymentTermsClient({ terms }: { terms: any[] }) {
   const [isPending, startTransition] = useTransition();
@@ -29,11 +29,16 @@ export function PaymentTermsClient({ terms }: { terms: any[] }) {
             Payment Terms & Due Intervals
           </h1>
           <p className="text-xs text-neutral-500">
-            Defines due date calculation offset (Invoice Issue Date + Terms Days)
+            Defines due date calculation offset (Invoice Issue Date + Terms
+            Days)
           </p>
         </div>
 
-        <Button onClick={() => setIsModalOpen(true)} size="sm" className="flex items-center gap-1.5">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          size="sm"
+          className="flex items-center gap-1.5"
+        >
           <Plus className="h-3.5 w-3.5" />
           <span>New Payment Term</span>
         </Button>
@@ -48,9 +53,14 @@ export function PaymentTermsClient({ terms }: { terms: any[] }) {
             <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-400">
               Contract Terms
             </span>
-            <h3 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">{t.name}</h3>
+            <h3 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">
+              {t.name}
+            </h3>
             <div className="text-2xl font-extrabold font-mono pt-1">
-              {t.days} <span className="text-xs font-sans text-neutral-400 font-normal">days until due</span>
+              {t.days}{" "}
+              <span className="text-xs font-sans text-neutral-400 font-normal">
+                days until due
+              </span>
             </div>
           </div>
         ))}
@@ -69,10 +79,22 @@ export function PaymentTermsClient({ terms }: { terms: any[] }) {
         )}
         <form action={handleSubmit} className="space-y-4 text-xs">
           <Input label="Term Label" name="name" required placeholder="Net 30" />
-          <Input label="Days Until Due" name="days" type="number" min="0" required placeholder="30" />
+          <Input
+            label="Days Until Due"
+            name="days"
+            type="number"
+            min="0"
+            required
+            placeholder="30"
+          />
 
           <div className="flex justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" size="sm" isLoading={isPending}>

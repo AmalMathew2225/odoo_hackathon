@@ -15,3 +15,4 @@ export default async function AdminTaxesPage() {
 
   return <TaxesClient taxes={(taxes || []) as any[]} />;
 }
+

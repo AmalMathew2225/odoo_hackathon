@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInvoiceEmail } from "@/lib/email/mailer";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Invoice, InvoiceLine, Profile } from "@/types/database";
 
 export async function transitionInvoiceAction(

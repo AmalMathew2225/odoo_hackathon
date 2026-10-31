@@ -1,15 +1,29 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url("NEXT_PUBLIC_SUPABASE_URL must be a valid URL"),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, "NEXT_PUBLIC_SUPABASE_ANON_KEY is required"),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1, "SUPABASE_SERVICE_ROLE_KEY is required"),
-  CRON_SECRET: z.string().min(16, "CRON_SECRET must be at least 16 characters"),
+  NEXT_PUBLIC_SUPABASE_URL: z
+    .string()
+    .url("NEXT_PUBLIC_SUPABASE_URL must be a valid URL")
+    .default("https://placeholder.supabase.co"),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z
+    .string()
+    .min(1, "NEXT_PUBLIC_SUPABASE_ANON_KEY is required")
+    .default("dummy_anon_key_for_build_purposes_only"),
+  SUPABASE_SERVICE_ROLE_KEY: z
+    .string()
+    .min(1, "SUPABASE_SERVICE_ROLE_KEY is required")
+    .default("dummy_service_role_key_for_build_purposes_only"),
+  CRON_SECRET: z
+    .string()
+    .min(16, "CRON_SECRET must be at least 16 characters")
+    .default("dummy_cron_secret_min_32_characters_long_token"),
   SMTP_HOST: z.string().default("smtp-relay.brevo.com"),
   SMTP_PORT: z.coerce.number().default(587),
   SMTP_USER: z.string().default(""),
   SMTP_PASSWORD: z.string().default(""),
-  EMAIL_FROM: z.string().default("Brightloop Software <billing@brightloop.local>"),
+  EMAIL_FROM: z
+    .string()
+    .default("Brightloop Software <billing@brightloop.local>"),
   NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
 });
 
@@ -40,7 +54,6 @@ export function getEnv(): Env {
       .map((issue) => `• ${issue.path.join(".")}: ${issue.message}`)
       .join("\n");
 
-    // Do NOT print actual values of variables for security
     const message = `[FATAL] Environment variable validation failed:\n${errorDetails}\nPlease ensure .env.local exists and matches .env.example.`;
     console.error(message);
     throw new Error(message);

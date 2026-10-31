@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
-import { ThemeToggle } from "./theme-toggle";
 import type { UserRole } from "@/types/database";
+import { ThemeToggle } from "./theme-toggle";
 
 interface HeaderProps {
   role: UserRole;
@@ -16,7 +15,9 @@ export function Header({ role, userEmail }: HeaderProps) {
         <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono">
           SYSTEM ENVIRONMENT
         </span>
-        <span className="text-xs text-neutral-300 dark:text-neutral-700">/</span>
+        <span className="text-xs text-neutral-300 dark:text-neutral-700">
+          /
+        </span>
         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono uppercase font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200">
           {role} SESSION
         </span>

@@ -21,3 +21,4 @@ export function timingSafeCompare(known: string, received: string): boolean {
 
   return crypto.timingSafeEqual(knownBuffer, receivedBuffer);
 }
+

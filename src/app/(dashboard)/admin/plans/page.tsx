@@ -15,3 +15,4 @@ export default async function AdminPlansPage() {
 
   return <PlansClient plans={(plans || []) as any[]} />;
 }
+

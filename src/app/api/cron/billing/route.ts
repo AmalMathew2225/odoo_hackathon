@@ -27,7 +27,9 @@ export async function POST(request: NextRequest) {
 
     // Optional query param: target_date (defaults to CURRENT_DATE in DB)
     const url = new URL(request.url);
-    const targetDate = url.searchParams.get("target_date") || new Date().toISOString().split("T")[0];
+    const targetDate =
+      url.searchParams.get("target_date") ||
+      new Date().toISOString().split("T")[0];
 
     const supabase = createAdminClient();
     const { data, error } = await supabase.rpc("run_billing", {
@@ -36,7 +38,10 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Billing engine RPC error:", error);
-      return NextResponse.json({ success: false, error: "Internal billing error" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: "Internal billing error" },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({

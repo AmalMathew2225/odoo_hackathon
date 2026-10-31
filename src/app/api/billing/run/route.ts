@@ -11,11 +11,15 @@ export async function POST(request: NextRequest) {
     const session = await getCurrentSession();
 
     if (!session || session.role !== "admin") {
-      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 403 },
+      );
     }
 
     const body = await request.json().catch(() => ({}));
-    const targetDate = body.target_date || new Date().toISOString().split("T")[0];
+    const targetDate =
+      body.target_date || new Date().toISOString().split("T")[0];
 
     const supabase = createAdminClient();
     const { data, error } = await supabase.rpc("run_billing", {
@@ -23,7 +27,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({

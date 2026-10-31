@@ -15,3 +15,4 @@ export default async function AdminDiscountsPage() {
 
   return <DiscountsClient discounts={(discounts || []) as any[]} />;
 }
+

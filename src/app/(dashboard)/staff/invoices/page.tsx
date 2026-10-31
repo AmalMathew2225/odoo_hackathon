@@ -8,7 +8,9 @@ interface InvoicesPageProps {
   searchParams: Promise<{ page?: string; status?: string; search?: string }>;
 }
 
-export default async function InvoicesPage({ searchParams }: InvoicesPageProps) {
+export default async function InvoicesPage({
+  searchParams,
+}: InvoicesPageProps) {
   await requireAuth(["admin", "staff"]);
   const params = await searchParams;
 
@@ -19,14 +21,15 @@ export default async function InvoicesPage({ searchParams }: InvoicesPageProps) 
 
   const supabase = createAdminClient();
 
-  let query = supabase
-    .from("invoices")
-    .select(`
+  let query = supabase.from("invoices").select(
+    `
       id, invoice_number, status, issue_date, due_date, period_start, period_end,
       subtotal, tax_amount, discount_amount, total_amount, amount_paid, sent_at,
       profiles(full_name, company_name, email),
       subscriptions(subscription_number)
-    `, { count: "exact" });
+    `,
+    { count: "exact" },
+  );
 
   if (statusFilter) {
     query = query.eq("status", statusFilter);

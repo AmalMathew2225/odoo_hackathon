@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
-import { getEnv } from "@/lib/env";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
+import { getEnv } from "@/lib/env";
 import type { Invoice, InvoiceLine, Profile } from "@/types/database";
 
 let transporter: nodemailer.Transporter | null = null;
@@ -38,7 +38,11 @@ export async function sendInvoiceEmail({
   invoice,
   lines,
   customer,
-}: SendInvoiceEmailParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
+}: SendInvoiceEmailParams): Promise<{
+  success: boolean;
+  messageId?: string;
+  error?: string;
+}> {
   try {
     const env = getEnv();
     const mail = getTransporter();

@@ -43,7 +43,9 @@ export function roundHalfUp(val: number): number {
  * Calculates pricing for a single line item.
  * Rule: (base + variant) * quantity - discount + tax(on discounted amount)
  */
-export function calculateLinePricing(line: PricingLineInput): PricingLineResult {
+export function calculateLinePricing(
+  line: PricingLineInput,
+): PricingLineResult {
   const quantity = Math.max(1, Math.floor(line.quantity));
   const variantExtra = Math.max(0, Math.floor(line.variantExtra || 0));
   const unitPrice = Math.max(0, Math.floor(line.basePrice)) + variantExtra;
@@ -62,7 +64,10 @@ export function calculateLinePricing(line: PricingLineInput): PricingLineResult 
   const discountedBase = Math.max(0, subtotal - discountAmount);
 
   // Stack taxes
-  const combinedTaxRate = (line.taxRates || []).reduce((sum, rate) => sum + rate, 0);
+  const combinedTaxRate = (line.taxRates || []).reduce(
+    (sum, rate) => sum + rate,
+    0,
+  );
   const taxAmount = roundHalfUp((discountedBase * combinedTaxRate) / 100);
   const lineTotal = discountedBase + taxAmount;
 
@@ -80,11 +85,16 @@ export function calculateLinePricing(line: PricingLineInput): PricingLineResult 
 /**
  * Calculates totals across multiple lines for a quotation or invoice.
  */
-export function calculateDocumentPricing(lines: PricingLineInput[]): DocumentPricingResult {
+export function calculateDocumentPricing(
+  lines: PricingLineInput[],
+): DocumentPricingResult {
   const lineResults = lines.map(calculateLinePricing);
 
   const subtotal = lineResults.reduce((acc, l) => acc + l.subtotal, 0);
-  const totalDiscount = lineResults.reduce((acc, l) => acc + l.discountAmount, 0);
+  const totalDiscount = lineResults.reduce(
+    (acc, l) => acc + l.discountAmount,
+    0,
+  );
   const totalTax = lineResults.reduce((acc, l) => acc + l.taxAmount, 0);
   const grandTotal = subtotal - totalDiscount + totalTax;
 

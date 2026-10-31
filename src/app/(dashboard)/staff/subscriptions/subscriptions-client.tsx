@@ -1,18 +1,28 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  Plus,
+  RotateCcw,
+  Search,
+  XCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState, useTransition } from "react";
+import {
+  createSubscriptionAction,
+  renewSubscriptionAction,
+  transitionSubscriptionAction,
+} from "@/actions/subscriptions";
 import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
-import {
-  createSubscriptionAction,
-  transitionSubscriptionAction,
-  renewSubscriptionAction,
-} from "@/actions/subscriptions";
-import { Plus, Search, ChevronLeft, ChevronRight, Pause, Play, XCircle, RotateCcw } from "lucide-react";
 
 interface SubscriptionsClientProps {
   subscriptions: any[];
@@ -116,7 +126,8 @@ export function SubscriptionsClient({
             Subscription Contracts
           </h1>
           <p className="text-xs text-neutral-500">
-            {totalCount.toLocaleString()} total contracts on file &bull; Server-side paginated
+            {totalCount.toLocaleString()} total contracts on file &bull;
+            Server-side paginated
           </p>
         </div>
 
@@ -132,7 +143,10 @@ export function SubscriptionsClient({
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-        <form onSubmit={handleSearchSubmit} className="flex gap-2 w-full sm:w-auto">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex gap-2 w-full sm:w-auto"
+        >
           <div className="relative w-full sm:w-64">
             <input
               type="text"
@@ -191,11 +205,18 @@ export function SubscriptionsClient({
                 subscriptions.map((s) => {
                   const line = s.subscription_lines?.[0];
                   return (
-                    <tr key={s.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                      <td className="py-3 px-4 font-mono font-medium">{s.subscription_number}</td>
+                    <tr
+                      key={s.id}
+                      className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    >
+                      <td className="py-3 px-4 font-mono font-medium">
+                        {s.subscription_number}
+                      </td>
                       <td className="py-3 px-4">
                         <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                          {s.profiles?.company_name || s.profiles?.full_name || "—"}
+                          {s.profiles?.company_name ||
+                            s.profiles?.full_name ||
+                            "—"}
                         </div>
                         <div className="text-[11px] text-neutral-400 font-mono">
                           {s.profiles?.email}
@@ -210,7 +231,8 @@ export function SubscriptionsClient({
                       <td className="py-3 px-4">
                         {line?.products?.name || "Standard Unit"}
                         <span className="block text-[11px] text-neutral-400 font-mono">
-                          Qty {line?.quantity || 1} &bull; {formatPaiseToINR(line?.amount || 0)}
+                          Qty {line?.quantity || 1} &bull;{" "}
+                          {formatPaiseToINR(line?.amount || 0)}
                         </span>
                       </td>
                       <td className="py-3 px-4">
@@ -254,7 +276,11 @@ export function SubscriptionsClient({
                           {s.status !== "closed" && (
                             <button
                               onClick={() => {
-                                if (confirm(`Close contract ${s.subscription_number}?`)) {
+                                if (
+                                  confirm(
+                                    `Close contract ${s.subscription_number}?`,
+                                  )
+                                ) {
                                   handleTransition(s.id, "closed");
                                 }
                               }}
@@ -277,7 +303,8 @@ export function SubscriptionsClient({
         {/* Pagination Bar */}
         <div className="flex items-center justify-between p-3 border-t border-neutral-200 dark:border-neutral-800 text-xs">
           <span className="text-neutral-500">
-            Page {page} of {Math.max(1, totalPages)} &bull; Showing {subscriptions.length} rows
+            Page {page} of {Math.max(1, totalPages)} &bull; Showing{" "}
+            {subscriptions.length} rows
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -331,7 +358,9 @@ export function SubscriptionsClient({
             >
               {customers.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.company_name ? `${c.company_name} (${c.full_name})` : c.full_name || c.email}
+                  {c.company_name
+                    ? `${c.company_name} (${c.full_name})`
+                    : c.full_name || c.email}
                 </option>
               ))}
             </select>
@@ -454,7 +483,11 @@ export function SubscriptionsClient({
                 <option value="">None</option>
                 {discounts.map((dc) => (
                   <option key={dc.id} value={dc.id}>
-                    {dc.code} ({dc.type === "fixed" ? formatPaiseToINR(dc.value) : `${dc.value}%`})
+                    {dc.code} (
+                    {dc.type === "fixed"
+                      ? formatPaiseToINR(dc.value)
+                      : `${dc.value}%`}
+                    )
                   </option>
                 ))}
               </select>

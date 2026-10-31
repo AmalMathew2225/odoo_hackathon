@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { StatusBadge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Modal } from "@/components/ui/modal";
-import { Input } from "@/components/ui/input";
-import { formatPaiseToINR } from "@/lib/billing/pricing";
-import { transitionInvoiceAction, sendInvoiceAction } from "@/actions/invoices";
-import { recordPaymentAction } from "@/actions/payments";
 import {
-  Search,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
   Mail,
   Printer,
-  CreditCard,
-  CheckCircle,
+  Search,
   XCircle,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState, useTransition } from "react";
+import { sendInvoiceAction, transitionInvoiceAction } from "@/actions/invoices";
+import { recordPaymentAction } from "@/actions/payments";
+import { StatusBadge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
+import { formatPaiseToINR } from "@/lib/billing/pricing";
 
 interface InvoicesClientProps {
   invoices: any[];
@@ -79,7 +80,12 @@ export function InvoicesClient({
   };
 
   const handleCancel = async (id: string) => {
-    if (!confirm("Are you sure you want to cancel this invoice? Discount quotas will be restored.")) return;
+    if (
+      !confirm(
+        "Are you sure you want to cancel this invoice? Discount quotas will be restored.",
+      )
+    )
+      return;
     startTransition(async () => {
       try {
         await transitionInvoiceAction(id, "cancelled");
@@ -127,14 +133,18 @@ export function InvoicesClient({
             Billing Invoices
           </h1>
           <p className="text-xs text-neutral-500">
-            {totalCount.toLocaleString()} invoices on ledger &bull; Point-in-time pricing snapshots
+            {totalCount.toLocaleString()} invoices on ledger &bull;
+            Point-in-time pricing snapshots
           </p>
         </div>
       </div>
 
       {/* Filter and Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-        <form onSubmit={handleSearchSubmit} className="flex gap-2 w-full sm:w-auto">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex gap-2 w-full sm:w-auto"
+        >
           <input
             type="text"
             value={search}
@@ -197,7 +207,10 @@ export function InvoicesClient({
                   const remaining = inv.total_amount - inv.amount_paid;
 
                   return (
-                    <tr key={inv.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                    <tr
+                      key={inv.id}
+                      className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    >
                       <td className="py-3 px-4 font-mono font-medium">
                         <Link
                           href={`/invoices/${inv.id}/print`}
@@ -213,7 +226,9 @@ export function InvoicesClient({
                       </td>
                       <td className="py-3 px-4">
                         <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                          {inv.profiles?.company_name || inv.profiles?.full_name || "—"}
+                          {inv.profiles?.company_name ||
+                            inv.profiles?.full_name ||
+                            "—"}
                         </div>
                         <div className="text-[11px] text-neutral-400 font-mono">
                           {inv.profiles?.email}
@@ -295,7 +310,8 @@ export function InvoicesClient({
         {/* Pagination Bar */}
         <div className="flex items-center justify-between p-3 border-t border-neutral-200 dark:border-neutral-800 text-xs">
           <span className="text-neutral-500">
-            Page {page} of {Math.max(1, totalPages)} &bull; Showing {invoices.length} rows
+            Page {page} of {Math.max(1, totalPages)} &bull; Showing{" "}
+            {invoices.length} rows
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -344,16 +360,22 @@ export function InvoicesClient({
             <div className="rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 p-3 space-y-1">
               <div className="flex justify-between">
                 <span className="text-neutral-500">Total Invoice Amount:</span>
-                <span className="font-mono">{formatPaiseToINR(paymentInvoice.total_amount)}</span>
+                <span className="font-mono">
+                  {formatPaiseToINR(paymentInvoice.total_amount)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-neutral-500">Already Paid:</span>
-                <span className="font-mono">{formatPaiseToINR(paymentInvoice.amount_paid)}</span>
+                <span className="font-mono">
+                  {formatPaiseToINR(paymentInvoice.amount_paid)}
+                </span>
               </div>
               <div className="flex justify-between font-bold pt-1 border-t border-neutral-200 dark:border-neutral-800">
                 <span>Remaining Balance Due:</span>
                 <span className="font-mono">
-                  {formatPaiseToINR(paymentInvoice.total_amount - paymentInvoice.amount_paid)}
+                  {formatPaiseToINR(
+                    paymentInvoice.total_amount - paymentInvoice.amount_paid,
+                  )}
                 </span>
               </div>
             </div>
@@ -368,7 +390,10 @@ export function InvoicesClient({
                   type="number"
                   step="0.01"
                   min="0.01"
-                  max={(paymentInvoice.total_amount - paymentInvoice.amount_paid) / 100}
+                  max={
+                    (paymentInvoice.total_amount - paymentInvoice.amount_paid) /
+                    100
+                  }
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(Number(e.target.value))}
                   required
@@ -398,7 +423,12 @@ export function InvoicesClient({
                 <label className="block text-[11px] font-semibold uppercase text-neutral-500 mb-1">
                   Settlement Date
                 </label>
-                <Input name="paymentDate" type="date" defaultValue={today} required />
+                <Input
+                  name="paymentDate"
+                  type="date"
+                  defaultValue={today}
+                  required
+                />
               </div>
               <div>
                 <label className="block text-[11px] font-semibold uppercase text-neutral-500 mb-1">

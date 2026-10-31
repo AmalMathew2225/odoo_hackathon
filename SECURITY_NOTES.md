@@ -91,3 +91,4 @@
   * `recharts` (declarative data visualization for the finance dashboard).
   * `nodemailer` & `@types/nodemailer` (direct SMTP email delivery).
   * `vitest` (fast unit testing for pricing and billing math).
+

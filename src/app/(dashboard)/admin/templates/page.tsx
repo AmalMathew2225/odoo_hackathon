@@ -18,8 +18,14 @@ export default async function AdminTemplatesPage() {
       `)
       .order("created_at", { ascending: false }),
 
-    supabase.from("plans").select("id, name, billing_period").eq("is_active", true),
-    supabase.from("products").select("id, name, sales_price").eq("is_active", true),
+    supabase
+      .from("plans")
+      .select("id, name, billing_period")
+      .eq("is_active", true),
+    supabase
+      .from("products")
+      .select("id, name, sales_price")
+      .eq("is_active", true),
   ]);
 
   return (

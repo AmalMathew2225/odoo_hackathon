@@ -1,9 +1,9 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
 import { getEnv } from "@/lib/env";
 import type { Invoice, InvoiceLine, Profile } from "@/types/database";
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: Transporter | null = null;
 
 function getTransporter() {
   if (transporter) return transporter;

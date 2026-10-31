@@ -3,8 +3,6 @@ import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { getCurrentSession } from "@/lib/auth/session";
 
-export const instant = false;
-
 export default async function DashboardLayout({
   children,
 }: {

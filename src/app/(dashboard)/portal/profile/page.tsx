@@ -1,8 +1,6 @@
 import { requireAuth } from "@/lib/auth/session";
 import { ProfileForm } from "./profile-form";
 
-export const dynamic = "force-dynamic";
-
 export default async function PortalProfilePage() {
   const session = await requireAuth();
 

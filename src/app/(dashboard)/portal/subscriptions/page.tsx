@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { PortalSubscriptionsClient } from "./portal-subscriptions-client";
 
-export const dynamic = "force-dynamic";
-
 export default async function PortalSubscriptionsPage() {
   const session = await requireAuth();
   const supabase = createAdminClient();

@@ -2,8 +2,6 @@ import { DashboardClient } from "@/components/dashboard/dashboard-client";
 import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export const dynamic = "force-dynamic";
-
 export default async function DashboardPage() {
   await requireAuth(["admin", "staff"]);
   const supabase = createAdminClient();

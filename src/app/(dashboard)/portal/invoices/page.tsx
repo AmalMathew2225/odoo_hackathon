@@ -5,8 +5,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export const dynamic = "force-dynamic";
-
 export default async function PortalInvoicesPage() {
   const session = await requireAuth();
   const supabase = createAdminClient();

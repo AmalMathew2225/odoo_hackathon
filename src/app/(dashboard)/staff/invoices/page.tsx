@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { InvoicesClient } from "./invoices-client";
 
-export const dynamic = "force-dynamic";
-
 interface InvoicesPageProps {
   searchParams: Promise<{ page?: string; status?: string; search?: string }>;
 }

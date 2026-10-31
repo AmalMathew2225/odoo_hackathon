@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { getCurrentSession } from "@/lib/auth/session";
 
-export const dynamic = "force-dynamic";
 export const instant = false;
 
 export default async function HomePage() {

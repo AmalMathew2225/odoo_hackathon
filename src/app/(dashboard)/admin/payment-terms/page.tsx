@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { PaymentTermsClient } from "./payment-terms-client";
 
-export const dynamic = "force-dynamic";
-
 export default async function AdminPaymentTermsPage() {
   await requireAuth(["admin"]);
   const supabase = createAdminClient();

@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SubscriptionsClient } from "./subscriptions-client";
 
-export const dynamic = "force-dynamic";
-
 interface SubscriptionsPageProps {
   searchParams: Promise<{ page?: string; status?: string; search?: string }>;
 }

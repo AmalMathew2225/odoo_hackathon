@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ProductsClient } from "./products-client";
 
-export const dynamic = "force-dynamic";
-
 export default async function AdminProductsPage() {
   await requireAuth(["admin"]);
   const supabase = createAdminClient();

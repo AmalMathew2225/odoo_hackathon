@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DiscountsClient } from "./discounts-client";
 
-export const dynamic = "force-dynamic";
-
 export default async function AdminDiscountsPage() {
   await requireAuth(["admin"]);
   const supabase = createAdminClient();

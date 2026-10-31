@@ -2,8 +2,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { formatPaiseToINR } from "@/lib/billing/pricing";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export const dynamic = "force-dynamic";
-
 interface PaymentsPageProps {
   searchParams: Promise<{ page?: string }>;
 }

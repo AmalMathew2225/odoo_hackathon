@@ -42,3 +42,8 @@ next-env.d.ts
 
 #dev files
 AGENTS.md
+raw/
+prompt.txt
+PLAN.md
+tests/
+schema/

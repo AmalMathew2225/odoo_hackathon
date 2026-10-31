@@ -37,7 +37,7 @@ export default function LoginPage() {
             type="email"
             required
             autoComplete="email"
-            placeholder="alex@brightloop.com"
+            placeholder="name@example.com"
           />
 
           <div className="space-y-1">

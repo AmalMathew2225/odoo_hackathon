@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { PrintButton } from "./print-button";
 
 export const dynamic = "force-dynamic";
+export const instant = false;
 
 interface PrintPageProps {
   params: Promise<{ id: string }>;

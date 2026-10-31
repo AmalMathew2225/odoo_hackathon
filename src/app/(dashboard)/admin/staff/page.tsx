@@ -16,4 +16,3 @@ export default async function AdminStaffPage() {
 
   return <StaffClient users={(users || []) as any[]} />;
 }
-
